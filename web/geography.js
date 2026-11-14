@@ -48,7 +48,8 @@ export function placeAt(lat, lon) {
 export function locationAt(lat,lon) {
   const key=`${lat.toFixed(5)},${lon.toFixed(5)}`;
   if(locationCache.has(key))return locationCache.get(key);
-  const country=countryAt(lat,lon)?.properties.name || (lat < -60 ? 'Antarctica' : 'Country unresolved at this map scale');
+  const mappedCountry=countryAt(lat,lon)?.properties.name;
+  const country=mappedCountry || (lat <= -75 ? 'Antarctic region' : 'Country unresolved at this map scale');
   let result={title:country,city:null,region:'',country,distanceKm:null,id:null,context:'Reference place data unavailable; coordinates identify the analysed cell.'};
   if(gazetteer?.places.length) {
     const a=lat*Math.PI/180,b=lon*Math.PI/180,x=Math.cos(a)*Math.cos(b),y=Math.cos(a)*Math.sin(b),z=Math.sin(a);
@@ -59,8 +60,11 @@ export function locationAt(lat,lon) {
     const distanceKm=6371*Math.acos(Math.min(1,Math.max(-1,best)));
     const distance=distanceKm<1?'<1':Math.round(distanceKm).toLocaleString('en');
     const jurisdiction=[region,cityCountry].filter((part,i,all)=>part&&all.indexOf(part)===i).join(', ');
-    result={title:distanceKm<=100?`Near ${city}`:`Nearest city: ${city}`,city,region,country:cityCountry,cellCountry:country,distanceKm,id,cityLat,cityLon,
-      context:`${jurisdiction} · ${distance} km from analysed cell`,
+    const remote=distanceKm>100;
+    const area=country==='Country unresolved at this map scale'?'Remote land cell':country;
+    result={title:remote?area:`Near ${city}`,city,region,country:cityCountry,cellCountry:country,distanceKm,id,cityLat,cityLon,remote,
+      context:remote?`Remote site · no recorded city within 100 km · closest ${distance} km away`:`${jurisdiction} · ${distance} km from analysed cell`,
+      referenceContext:`${city}, ${jurisdiction} · ${distance} km away · reference only`,
       note:'Nearest recorded city/town in GeoNames cities15000. The state/region belongs to that reference place, not necessarily to the analysed cell.'};
   }
   if(locationCache.size>=512)locationCache.delete(locationCache.keys().next().value);

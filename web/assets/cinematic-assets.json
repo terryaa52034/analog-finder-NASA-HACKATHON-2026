@@ -1,0 +1,33 @@
+{
+  "credit": "Solar System Scope / INOVE",
+  "source": "https://www.solarsystemscope.com/textures/",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "role": "Decorative rendering only; not matching inputs",
+  "assets": {
+    "moon.jpg": {
+      "url": "https://www.solarsystemscope.com/textures/download/2k_moon.jpg",
+      "sha256": "2764ba6535ea0481a062846ee033cc7a909dae05b31a8fd13f3e98f3a7fd92bd",
+      "size": [
+        2048,
+        1024
+      ]
+    },
+    "mars.jpg": {
+      "url": "https://www.solarsystemscope.com/textures/download/2k_mars.jpg",
+      "sha256": "2d187f3e77a98eaa8cea5f4cc722f633c122ef170b9e94ace6b5fb6cbc3f8e01",
+      "size": [
+        2048,
+        1024
+      ]
+    },
+    "earth-clouds.jpg": {
+      "url": "https://www.solarsystemscope.com/textures/download/2k_earth_clouds.jpg",
+      "sha256": "fffd7f68d41b37274822150e54a6ef605af1d3ec35624d9f628c3b896bfa42ed",
+      "size": [
+        2048,
+        1024
+      ]
+    }
+  }
+}

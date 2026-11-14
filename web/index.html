@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="drone.css">
   <link rel="stylesheet" href="liquid.css">
   <link rel="stylesheet" href="layout.css">
+  <link rel="stylesheet" href="cinematic.css">
 </head>
 <body>
   <nav class="mission-bar"><a class="wordmark" href="./">◉ <span>ANALOG<span class="mint"> FINDER</span><small>EARTH · MOON · MARS</small></span></a><span class="mission-label">PLANETARY RECONNAISSANCE / EARTH ANALOGS</span><span class="live-status">● NASA EARTH DATA</span></nav>
@@ -71,6 +72,7 @@
   </div>
   <aside class="companion" aria-label="LUMA mission guide"><button id="mascot-toggle" aria-expanded="true" aria-label="Minimize mission guide">−</button><agent-mascot shape="orb" material="glass" color="#87edda" accent="#c3a8ff" accessories="ring antenna sheen" mood="listening" motion="0.5" float="0.4" track="window"></agent-mascot><div class="companion-copy"><span class="eyebrow">LUMA / MISSION GUIDE</span><p id="guide-message" aria-live="polite">Pick a world. I'll help you read the evidence here on Earth.</p><div><button id="guide-explain">Explain this site ↗</button><button id="guide-layers">Explore layers</button></div><small>Local guide · no AI service connected</small></div></aside>
 
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
   <script type="module" src="vendor/agent-mascots.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script type="module" src="app.js"></script>

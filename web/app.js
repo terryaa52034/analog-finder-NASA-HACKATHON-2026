@@ -127,12 +127,41 @@ function initMap() {
   };
   const companionObserver = new ResizeObserver(reserveCompanion);
   companionObserver.observe($('.companion')); companionObserver.observe($('.map-wrap'));
-  map = L.map("map", { worldCopyJump: true, minZoom: 2, maxZoom: 8, zoomControl: true }).setView([20, 10], 2);
+  const earthBounds = L.latLngBounds([[-85.05112878, -180], [85.05112878, 180]]);
+  map = L.map("map", { worldCopyJump: false, minZoom: 2, maxZoom: 8, zoomControl: true,
+    maxBounds: earthBounds, maxBoundsViscosity: 1, bounceAtZoomLimits: false,
+  }).setView([20, 10], 2);
+  let correctingBounds = false;
+  const clampViewport = () => {
+    if (correctingBounds || !$('#map').clientWidth || !$('#map').clientHeight) return;
+    const world = map.getPixelWorldBounds(), view = map.getPixelBounds();
+    const dx = view.min.x < world.min.x + 1 ? Math.ceil(world.min.x + 1 - view.min.x) : view.max.x > world.max.x - 1 ? Math.floor(world.max.x - 1 - view.max.x) : 0;
+    const dy = view.min.y < world.min.y + 1 ? Math.ceil(world.min.y + 1 - view.min.y) : view.max.y > world.max.y - 1 ? Math.floor(world.max.y - 1 - view.max.y) : 0;
+    if (dx || dy) {
+      correctingBounds = true;
+      map.panBy([dx, dy], { animate: false });
+      correctingBounds = false;
+    }
+  };
+  map.on('moveend zoomend', clampViewport);
+  const constrainMap = () => {
+    const container = $('#map');
+    if (!container.clientWidth || !container.clientHeight) return;
+    map.invalidateSize({ pan: false });
+    const minimum = Math.min(8, Math.max(2, Math.ceil(Math.log2((Math.max(container.clientWidth, container.clientHeight) + 2) / 256))));
+    map.setMinZoom(minimum);
+    if (map.getZoom() < minimum) map.setZoom(minimum, { animate: false });
+    map.panInsideBounds(earthBounds, { animate: false });
+    clampViewport();
+  };
+  const mapSizeObserver = new ResizeObserver(constrainMap);
+  mapSizeObserver.observe($('#map'));
+  constrainMap();
   baseLayers.satellite = L.tileLayer(
     "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_ShadedRelief_Bathymetry/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg",
-    { maxNativeZoom: 8, attribution: "Imagery: NASA GIBS / Blue Marble" },
+    { maxNativeZoom: 8, noWrap: true, attribution: "Imagery: NASA GIBS / Blue Marble" },
   ).addTo(map);
-  baseLayers.dark = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri, HERE, Garmin, OpenStreetMap contributors', maxZoom: 8 });
+  baseLayers.dark = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri, HERE, Garmin, OpenStreetMap contributors', maxZoom: 8, noWrap: true });
   map.createPane('placeLabels'); map.getPane('placeLabels').style.zIndex = 450;
   map.getPane('placeLabels').style.pointerEvents = 'none';
   labels = L.layerGroup().addTo(map);
@@ -293,7 +322,7 @@ function renderResults() {
     const li = document.createElement("li"), b = document.createElement("button");
     const location = locationAt(g.lat[i],g.lon[i]);
     b.type = "button";
-    b.title = `${location.title} · ${location.context}. The exact grid coordinates identify the match, not the reference city.`;
+    b.title = `${location.title} · ${location.context}. ${location.referenceContext || ''}. The exact grid coordinates identify the match, not the reference city.`;
     if (i === state.selected) b.classList.add("active");
     b.innerHTML = `<span class="rank">${r + 1}</span>
       <span class="where">${escapeHtml(siteName(i))}<span class="tag location-context">${escapeHtml(location.context)}</span><span class="tag">${coord(g.lat[i], g.lon[i])}</span>${g.known[i] ? `<span class="tag">near ${g.known[i]}</span>` : ""}</span>
@@ -353,7 +382,7 @@ function renderCard(i) {
     + t.limits.map((l) => `<li>${l}</li>`).join("");
   const la = g.lat[i], lo = g.lon[i];
   card.innerHTML = `<button class="close" type="button" aria-label="Close">×</button>
-    <span class="eyebrow">SITE INTELLIGENCE ${rank >= 0 ? `/ RANK ${rank + 1}` : ''}</span><h3>${escapeHtml(siteName(i))}</h3><div class="sub">${escapeHtml(location.context)}</div><div class="sub">${coord(la, lo)}</div><p class="location-disclaimer">City/state names describe the nearest recorded place, not the full 0.5° cell. <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> · CC BY 4.0.</p>
+    <span class="eyebrow">SITE INTELLIGENCE ${rank >= 0 ? `/ RANK ${rank + 1}` : ''}</span><h3>${escapeHtml(siteName(i))}</h3><div class="sub">${escapeHtml(location.context)}</div><div class="sub">${coord(la, lo)}</div>${location.remote ? `<p class="location-disclaimer">Distant reference only: ${escapeHtml(location.referenceContext)}. This city/state is not the analysed site's location.</p>` : ''}<p class="location-disclaimer">City/state names describe a reference place, not the full 0.5° cell. <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> · CC BY 4.0.</p>
     <div class="sub">Earth analog for ${t.name} (${t.body}) · 0.5° cell (~55 km)</div>
     ${t.provenance ? `<p class="capture-provenance">${t.provenance}</p>` : ''}
     ${g.known[i] ? `<span class="known">⚑ Near a well-known analog: ${g.known[i]}</span>` : ""}
@@ -438,7 +467,6 @@ async function main() {
   computeStats(state.grid);
   $("#data-year").textContent = state.grid.year;
   initControls();
-  $('#mascot-toggle').click();
   $("#hide-known").onchange = () => { pickTop(); renderResults(); renderSites(); if (state.selected !== null && !$('#card').hidden) renderCard(state.selected); };
   $("#reset-weights").onclick = () => { if (state.target) setTarget(state.target, state.capture); };
   $("#export").onclick = exportCsv;

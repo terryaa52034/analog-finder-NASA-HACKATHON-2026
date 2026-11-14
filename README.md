@@ -39,12 +39,23 @@ python3 -m http.server 8765 --directory web  # then open http://localhost:8765
 
 ## Mission interface
 
-The opening mission briefing features a Three.js Earth and LUMA. Choose **Start a
-drone mission** or **Explore Earth** for a camera zoom into the application; use
-**Skip briefing** for an immediate handoff. **Mission briefing** in the top bar
-replays the scene without clearing your current target or drone history. Reduced
-motion skips the zoom, and a textured Earth fallback works without WebGL. The intro
-releases its renderer, animation loop and GPU resources after handoff.
+The opening now plays a roughly 13.5-second cinematic journey: Moon close-up,
+Mars fly-by, Earth approach, straight-axis alignment and an illuminated connection,
+then flows into the interactive orbit briefing using the same renderer. It uses 2K maps,
+clouds, a seeded starfield, subtle nebulae, surface pulses and UnrealBloomPass.
+The alignment and beam are artistic, not physical orbital positions. Decorative
+surface relief does not provide scientific terrain measurements.
+
+**Skip cinematic** moves directly to the orbit briefing, including during loading
+or the beam sequence. There is no Skip Intro button. After the film, the planets
+reframe into a larger immersive composition and the mission briefing/LUMA appear.
+Choose **Start a drone mission** or **Explore Earth** to enter the app. The orbit
+screen's **Replay cinematic** and the app's **Mission briefing** can replay the
+journey without clearing your target or drone history. Reduced-motion
+preferences start in the static orbit briefing; unavailable WebGL falls back to
+that accessible briefing. The sequence pauses in a hidden tab, adapts render
+resolution for slower devices, and disposes temporary GPU resources on exit.
+See [CINEMATIC_INTRO.md](CINEMATIC_INTRO.md) for the timeline and lifecycle.
 
 A fresh URL opens on an unselected Earth overview. No Shackleton target or match
 overlay is applied automatically. An explicit target URL hash still opens that
@@ -53,6 +64,11 @@ primary workflow. Environmental controls expand after choosing a target; map lay
 are available from the floating **Map layers** control. **Country labels** uses the
 local country boundaries, rather than a tile layer mixing oceans, continents and
 other place names.
+
+The atlas constrains panning to the supported Mercator world, disables repeated
+world tiles and adjusts minimum zoom to the viewport so the map cannot be dragged
+or zoomed into empty space beyond its edges. LUMA starts expanded and changes
+visibility only when the user minimizes or restores the guide.
 
 The web glass treatment follows the separation, rounded geometry, legibility and
 motion principles in Apple's [Materials guidance](https://developer.apple.com/design/human-interface-guidelines/materials)
@@ -94,6 +110,9 @@ under CC BY 4.0; no reverse-geocoding API or account is required. This is a refe
 location, not a claim that the cell lies inside the named city/state. It is the
 closest place in this selected gazetteer, which excludes many small settlements.
 Remote sites can be hundreds or thousands of kilometres from a recorded city.
+For places more than 100 km from a recorded city, the result title uses the actual
+cell's country/region (for example Antarctica). Distant city/state names appear
+only in the report as reference information, never as the site's own location.
 CSV exports preserve exact cell coordinates and include reference city/admin,
 country, distance and GeoNames ID. Rebuild with `python pipeline/build_places.py`.
 

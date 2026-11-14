@@ -81,7 +81,36 @@ https://developer.apple.com/design/human-interface-guidelines/materials .
 ## Simulation and scientific claims
 
 Drone geometry, terrain and animations are procedural demonstration code.
+The retained Orbit view's Moon/Mars textures and orbital light/trail are authored
+procedural illustrations. The new cinematic uses the separately credited texture
+pack below. Both trajectories are decorative rather than physical ephemerides.
 Captured pictures and instantaneous telemetry are simulations. Moon/Mars climate
 values are approximate scenario presets, not live mission API measurements.
 Similarity is a research/demo heuristic, not proof of landing safety, resource
 availability, permission to visit, or a scientifically validated new analogue.
+
+## Cinematic planetary maps and bloom addons
+
+Solar System Scope textures by INOVE, https://www.solarsystemscope.com/textures/ ,
+distributed under Creative Commons Attribution 4.0 International:
+https://creativecommons.org/licenses/by/4.0/ . Downloaded original 2048×1024 JPEGs:
+
+- `web/assets/moon.jpg`: https://www.solarsystemscope.com/textures/download/2k_moon.jpg
+- `web/assets/mars.jpg`: https://www.solarsystemscope.com/textures/download/2k_mars.jpg
+- `web/assets/earth-clouds.jpg`: https://www.solarsystemscope.com/textures/download/2k_earth_clouds.jpg
+
+The source describes NASA-derived imagery/elevation, tuned colour and some filled
+terrain gaps. These are rendered illustrations, not primary mission DEM products.
+Files are retained as downloaded. Runtime changes: spherical projection, lighting,
+texture-contrast bump shading, a small authored surface perturbation, cloud alpha,
+atmosphere, pulses and colour processing. These changes do not create measured
+planetary terrain or change the Earth analogue matcher. The Earth day map remains
+the separately credited direct NASA GIBS image. Asset hashes are recorded in
+`web/assets/cinematic-assets.json`.
+
+The MIT Three.js r172 addon modules under `web/vendor/addons/` implement
+EffectComposer, RenderPass, UnrealBloomPass, OutputPass and their dependencies.
+They come from the installed Three.js distribution with source headers retained
+and the existing `web/vendor/THREE-LICENSE.txt`. `pipeline/vendor_postprocessing.py`
+copies just their dependency closure. An import map resolves `three` to the same
+vendored r172 module; no CDN or new runtime package is required.

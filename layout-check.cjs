@@ -5,7 +5,7 @@ const intersects=(a,b)=>a.x<b.x+b.width-1&&a.x+a.width>b.x+1&&a.y<b.y+b.height-1
  const browser=await chromium.launch({headless:true});
  try{
   const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('http://127.0.0.1:8765');await page.waitForSelector('.intro-guide');await page.waitForTimeout(1500);
+  await page.goto('http://127.0.0.1:8765');await page.locator('#intro-orbit').click();await page.waitForSelector('.intro-guide');await page.waitForTimeout(1500);
   const sizes=[[1920,900],[1536,864],[1280,720],[1024,768],[954,869],[820,650],[768,1024],[390,844],[360,640],[320,568]];
   for(const[width,height]of sizes){
    await page.setViewportSize({width,height});
@@ -16,10 +16,11 @@ const intersects=(a,b)=>a.x<b.x+b.width-1&&a.x+a.width>b.x+1&&a.y<b.y+b.height-1
    assert.equal(await page.locator('#mission-intro').evaluate(node=>node.scrollWidth>node.clientWidth),false,`Intro horizontal overflow at ${width}`);
    if(width===954)await page.screenshot({path:'analog-finder/layout-intro.png'});
   }
-  await page.setViewportSize({width:1536,height:864});await page.locator('#intro-skip').click();await page.waitForSelector('#targets button');
+  await page.setViewportSize({width:1536,height:864});await page.locator('#intro-enter').click();await page.waitForSelector('#targets button');
   await page.locator('.target').first().click();
   for(const[width,height]of sizes){
    await page.setViewportSize({width,height});await page.mouse.move(0,0);await page.waitForTimeout(100);
+   await page.waitForFunction(()=>{const header=document.querySelector('.map-header').getBoundingClientRect(),card=document.querySelector('#card').getBoundingClientRect();return card.top>=header.bottom+8;},{},{timeout:3000});
    assert.equal(intersects(await page.locator('.map-heading').boundingBox(),await page.locator('.map-tools').boundingBox()),false,`Map heading/toolbar overlap at ${width}`);
    const targets=await page.locator('.target').evaluateAll(nodes=>nodes.map(node=>({width:node.getBoundingClientRect().width,height:node.getBoundingClientRect().height})));
    targets.forEach(rect=>{assert.ok(Math.abs(rect.width-targets[0].width)<1,`Unequal target widths at ${width}`);assert.ok(Math.abs(rect.height-targets[0].height)<1,`Unequal target heights at ${width}`)});
@@ -32,7 +33,7 @@ const intersects=(a,b)=>a.x<b.x+b.width-1&&a.x+a.width>b.x+1&&a.y<b.y+b.height-1
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`Dashboard overflow at ${width}`);
    if(width===954)await page.screenshot({path:'analog-finder/layout-report.png'});
   }
-  await page.setViewportSize({width:1536,height:864});await page.locator('#mascot-toggle').click();await page.waitForTimeout(150);
+  await page.setViewportSize({width:1536,height:864});if(await page.locator('#mascot-toggle').getAttribute('aria-expanded')==='false')await page.locator('#mascot-toggle').click();await page.waitForTimeout(150);
   assert.equal(intersects(await page.locator('#card').boundingBox(),await page.locator('.companion').boundingBox()),false,'Expanded guide overlaps report');
   assert.deepEqual(errors,[]);console.log('PASS: 10 viewport sizes; intro spacing, equal target cards, separate map controls/report/mascot, sticky report close, and no horizontal overflow.');
  }finally{await browser.close();}

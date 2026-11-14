@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
     const page=await browser.newPage({viewport:{width:1536,height:1000},deviceScaleFactor:1.5});
     const errors=[];page.on('pageerror',error=>errors.push(error.message));
     await page.goto('http://127.0.0.1:8765');
-    await page.locator('#intro-skip').click();
+    await page.locator('#intro-orbit').click();await page.locator('#intro-enter').click();
     await page.waitForFunction(()=>!document.querySelector('#drone-open').disabled);
     const modelChecks=await page.evaluate(async()=>{
       const {coordinatesAt,makeTerrain,analyseCapture}=await import('./drone-model.js');
