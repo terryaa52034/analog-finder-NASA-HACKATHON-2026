@@ -7,31 +7,41 @@
   <meta name="description" content="Find places on Earth that match conditions at Moon and Mars sites, using open NASA data.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mission.css">
+  <link rel="stylesheet" href="drone.css">
+  <link rel="stylesheet" href="liquid.css">
+  <link rel="stylesheet" href="layout.css">
 </head>
 <body>
+  <nav class="mission-bar"><a class="wordmark" href="./">◉ <span>ANALOG<span class="mint"> FINDER</span><small>EARTH · MOON · MARS</small></span></a><span class="mission-label">PLANETARY RECONNAISSANCE / EARTH ANALOGS</span><span class="live-status">● NASA EARTH DATA</span></nav>
+  <div class="mission-switcher" role="group" aria-label="Mission mode"><button id="earth-mode" class="active" type="button">⊕ Earth atlas</button><button id="drone-open" class="drone-entry" type="button" disabled>⌁ Drone Exploration <span>↗</span></button></div>
+  <button id="intro-replay" type="button" aria-label="Replay mission introduction">◉ Mission briefing</button>
   <div class="app">
     <aside class="panel" aria-label="Controls">
       <header class="brand">
-        <h1>Analog Finder</h1>
-        <p>Places on Earth that match conditions at Moon and Mars sites — trait by trait.</p>
+        <span class="eyebrow">YOUR MISSION CONTROL</span>
+        <h1>A world of<br>possibilities.</h1>
+        <p>Discover where Earth meets other worlds.</p>
       </header>
+      <button id="drone-mission-card" class="drone-mission-card" type="button" disabled><span class="mission-card-top"><span class="mission-card-icon">⌁</span><span class="mission-card-badge">MOON + MARS</span></span><strong>Go beyond the map.</strong><span>Pilot a drone. Capture a world.<br>Find its echo on Earth.</span><span class="mission-card-action">Start drone exploration <b>↗</b></span></button>
 
+      <aside id="drone-result-banner" class="drone-result-banner" hidden></aside>
       <section>
-        <h2>1 · Pick a target</h2>
+        <h2>Choose a world to compare</h2>
         <div id="targets" class="targets" role="radiogroup" aria-label="Target site"></div>
         <p id="target-blurb" class="muted small"></p>
       </section>
 
-      <section>
+      <details class="weight-section"><summary>Fine-tune your comparison</summary>
         <h2>2 · What matters to you?</h2>
         <p class="muted small">Set how much each trait counts. 0 ignores it.</p>
         <div id="weights" class="weights"></div>
         <button id="reset-weights" class="link-btn" type="button">Reset to target defaults</button>
-      </section>
+      </details>
 
       <section>
         <div class="row-between">
-          <h2>3 · Best matches</h2>
+          <h2>Earth discoveries</h2>
           <button id="export" class="link-btn" type="button">Download CSV</button>
         </div>
         <label class="check"><input id="hide-known" type="checkbox" checked> Hide well-known analog sites</label>
@@ -42,19 +52,26 @@
         Earth data: NASA MODIS (Terra) land temperature &amp; vegetation, MERRA-2 rainfall &amp; dust,
         ASTER GDEM elevation — via NASA GIBS, <span id="data-year"></span>, 0.5° grid.
         Moon/Mars values are approximate figures from mission results.
+        Reference city/state names: <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.
       </footer>
     </aside>
 
     <main class="map-wrap">
+      <div class="map-heading"><span class="eyebrow">THE EXPLORATION ATLAS</span><h2 id="mission-title">Your world. A new perspective.</h2><p id="map-location">Choose a planetary target or launch a drone mission.</p></div>
+      <div class="map-tools"><button id="world-view" type="button">⊕ World view</button><button id="globe-toggle" type="button" aria-pressed="false">◉ 3D globe</button><button id="details-toggle" type="button">Site report</button></div>
       <div id="map" aria-label="Map of match scores"></div>
-      <div class="legend" aria-hidden="true">
-        <span>Weak match</span><span class="ramp"></span><span>Strong match</span>
+      <section id="globe-view" hidden aria-label="Interactive 3D Earth"><div id="globe-canvas"></div><p class="globe-hint">Drag to orbit · Scroll to zoom · Click a beacon to inspect</p></section>
+      <details class="layer-dock" aria-label="Map layers"><summary>Map layers</summary><span class="eyebrow">SURFACE INTELLIGENCE</span><label>Base map<select id="basemap"><option value="satellite">NASA satellite</option><option value="dark">Dark atlas</option></select></label><label>Data overlay<select id="overlay-layer"><option value="match">Overall match</option></select></label><label class="opacity-label">Overlay opacity <output id="opacity-value">65%</output><input id="overlay-opacity" type="range" min="0" max="100" value="65"></label><div class="layer-checks"><label><input id="show-labels" type="checkbox" checked> Country labels</label><label><input id="show-borders" type="checkbox" checked> Borders</label><label><input id="show-sites" type="checkbox" checked> Ranked sites</label></div></details>
+      <div class="legend">
+        <span id="legend-low">Lower match</span><span class="ramp"></span><span id="legend-high">Higher match</span><small id="legend-note">Relative match · top 40% of cells</small>
       </div>
       <div id="loading" class="loading">Loading Earth data…</div>
       <article id="card" class="card" hidden></article>
     </main>
   </div>
+  <aside class="companion" aria-label="LUMA mission guide"><button id="mascot-toggle" aria-expanded="true" aria-label="Minimize mission guide">−</button><agent-mascot shape="orb" material="glass" color="#87edda" accent="#c3a8ff" accessories="ring antenna sheen" mood="listening" motion="0.5" float="0.4" track="window"></agent-mascot><div class="companion-copy"><span class="eyebrow">LUMA / MISSION GUIDE</span><p id="guide-message" aria-live="polite">Pick a world. I'll help you read the evidence here on Earth.</p><div><button id="guide-explain">Explain this site ↗</button><button id="guide-layers">Explore layers</button></div><small>Local guide · no AI service connected</small></div></aside>
 
+  <script type="module" src="vendor/agent-mascots.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script type="module" src="app.js"></script>
 </body>

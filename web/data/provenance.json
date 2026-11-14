@@ -1,0 +1,24 @@
+{
+  "checked_at": "2026-11-14T09:55:28.279830+00:00",
+  "countries": {
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson",
+    "sha256_input": "6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f",
+    "license": "Natural Earth public domain",
+    "changes": "Keep geometry; normalize country name and ISO properties."
+  },
+  "intro_earth": {
+    "url": "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=BlueMarble_ShadedRelief_Bathymetry&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=2048&HEIGHT=1024&FORMAT=image/jpeg",
+    "sha256": "b7c2ee592bae14fc1a60f4a2c75475693156cbbe093e057a1646d938df706d6a",
+    "credit": "NASA GIBS / Blue Marble Shaded Relief and Bathymetry",
+    "role": "Decorative imagery, not measured terrain."
+  },
+  "earth_grid": {
+    "sha256": "0741f65d702606cec780b6076752138237650988a54023c541eab738e06a600b",
+    "status": "Bundled repository artifact; declared sources in grid.json and build_grid.py. Not regenerated during this audit."
+  },
+  "service_checks": {
+    "NASA_WMS": "JPEG decoded successfully at 2048x1024",
+    "NASA_MODIS_colormap": "XML downloaded successfully",
+    "challenge_tabs": "Direct access failed TLS validation / web fetch; indexed official overview reviewed instead."
+  }
+}
