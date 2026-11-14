@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analog Finder</title>
+  <meta name="description" content="Find places on Earth that match conditions at Moon and Mars sites, using open NASA data.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="panel" aria-label="Controls">
+      <header class="brand">
+        <h1>Analog Finder</h1>
+        <p>Places on Earth that match conditions at Moon and Mars sites — trait by trait.</p>
+      </header>
+
+      <section>
+        <h2>1 · Pick a target</h2>
+        <div id="targets" class="targets" role="radiogroup" aria-label="Target site"></div>
+        <p id="target-blurb" class="muted small"></p>
+      </section>
+
+      <section>
+        <h2>2 · What matters to you?</h2>
+        <p class="muted small">Set how much each trait counts. 0 ignores it.</p>
+        <div id="weights" class="weights"></div>
+        <button id="reset-weights" class="link-btn" type="button">Reset to target defaults</button>
+      </section>
+
+      <section>
+        <div class="row-between">
+          <h2>3 · Best matches</h2>
+          <button id="export" class="link-btn" type="button">Download CSV</button>
+        </div>
+        <label class="check"><input id="hide-known" type="checkbox" checked> Hide well-known analog sites</label>
+        <ol id="results" class="results"></ol>
+      </section>
+
+      <footer class="muted small">
+        Earth data: NASA MODIS (Terra) land temperature &amp; vegetation, MERRA-2 rainfall &amp; dust,
+        ASTER GDEM elevation — via NASA GIBS, <span id="data-year"></span>, 0.5° grid.
+        Moon/Mars values are approximate figures from mission results.
+      </footer>
+    </aside>
+
+    <main class="map-wrap">
+      <div id="map" aria-label="Map of match scores"></div>
+      <div class="legend" aria-hidden="true">
+        <span>Weak match</span><span class="ramp"></span><span>Strong match</span>
+      </div>
+      <div id="loading" class="loading">Loading Earth data…</div>
+      <article id="card" class="card" hidden></article>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
