@@ -2,22 +2,26 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert = require('node:assert/strict');
 (async () => {
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({ viewport: { width: 1536, height: 1000 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({
+    viewport: { width: 1536, height: 1000 },
+    deviceScaleFactor: 1,
+  });
   const errors = [];
-  page.on('pageerror', error => errors.push(error.message));
+  page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('http://127.0.0.1:8765');
-  await page.locator('#intro-orbit').click();await page.locator('#intro-enter').click();
+  await page.locator('#intro-orbit').click();
+  await page.locator('#intro-enter').click();
   await page.waitForSelector('#targets button');
-  assert.equal(await page.locator('.target[aria-checked=true]').count(),0);
+  assert.equal(await page.locator('.target[aria-checked=true]').count(), 0);
   await page.locator('.target').first().click();
-  assert.equal(await page.locator('#mascot-toggle').getAttribute('aria-expanded'),'true');
+  assert.equal(await page.locator('#mascot-toggle').getAttribute('aria-expanded'), 'true');
   await page.waitForSelector('#results button', { timeout: 30000 });
-  await page.locator('#loading').waitFor({state:'hidden'});
+  await page.locator('#loading').waitFor({ state: 'hidden' });
   assert.equal(await page.locator('#results button').count(), 15);
   assert.equal(await page.locator('.rank-marker').count(), 15);
   assert.notEqual(await page.locator('#card h3').textContent(), '');
   await page.locator('#card .close').click();
-  await page.screenshot({path:'analog-finder/preview-desktop.png'});
+  await page.screenshot({ path: 'analog-finder/preview-desktop.png' });
   await page.locator('.layer-dock summary').click();
   await page.selectOption('#overlay-layer', 'elev');
   assert.match(await page.locator('#legend-note').textContent(), /Altitude/);
@@ -33,7 +37,7 @@ const assert = require('node:assert/strict');
   await page.waitForSelector('#globe-canvas canvas');
   assert.equal(await page.locator('#globe-toggle').getAttribute('aria-pressed'), 'true');
   await page.waitForTimeout(1200);
-  await page.screenshot({path:'analog-finder/preview-globe.png'});
+  await page.screenshot({ path: 'analog-finder/preview-globe.png' });
   await page.locator('#results button').nth(2).click();
   await page.locator('#guide-explain').click();
   assert.match(await page.locator('#guide-message').textContent(), /scores/);
@@ -51,9 +55,14 @@ const assert = require('node:assert/strict');
   assert.match(download.suggestedFilename(), /analogs/);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.locator('#card .close').click();
-  await page.screenshot({path:'analog-finder/preview-mobile.png',fullPage:true});
+  await page.screenshot({ path: 'analog-finder/preview-mobile.png', fullPage: true });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   assert.deepEqual(errors, []);
-  console.log('PASS: ranked sites, reports, data layers, opacity, basemap, toggles, globe, guide, target changes, CSV, mobile layout; no browser exceptions.');
+  console.log(
+    'PASS: ranked sites, reports, data layers, opacity, basemap, toggles, globe, guide, target changes, CSV, mobile layout; no browser exceptions.',
+  );
   await browser.close();
-})().catch(error => {console.error(error);process.exit(1)});
+})().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

@@ -1,0 +1,5 @@
+web/vendor/
+web/data/
+web/assets/
+web/planetary-profiles.js
+cache/

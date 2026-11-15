@@ -1,21 +1,20 @@
 # Third-party code, imagery and data
 
-Audited 2026-11-14. This application includes third-party material. It is not a
-claim of entirely original or copyright-free software.
+This application includes the software, data and imagery credited below.
+Third-party licences remain with their respective owners.
 
 ## Distributed libraries
 
-| Component | Source and licence | Retained notice |
-| --- | --- | --- |
-| Three.js | https://github.com/mrdoob/three.js — MIT | `web/vendor/THREE-LICENSE.txt` |
-| agent-mascots, by Kyle Oliveiro/contributors | https://github.com/comfycomputer/agent-mascots — MIT | `web/vendor/MASCOT-LICENSE.txt` |
-| Leaflet, loaded from cdnjs | https://github.com/Leaflet/Leaflet — BSD-2-Clause | `web/vendor/LEAFLET-LICENSE.txt` |
+| Component                                    | Source and licence                                   | Retained notice                  |
+| -------------------------------------------- | ---------------------------------------------------- | -------------------------------- |
+| Three.js                                     | https://github.com/mrdoob/three.js — MIT             | `web/vendor/THREE-LICENSE.txt`   |
+| agent-mascots, by Kyle Oliveiro/contributors | https://github.com/comfycomputer/agent-mascots — MIT | `web/vendor/MASCOT-LICENSE.txt`  |
+| Leaflet, loaded from cdnjs                   | https://github.com/Leaflet/Leaflet — BSD-2-Clause    | `web/vendor/LEAFLET-LICENSE.txt` |
 
-The installed Three.js and mascot distributions were copied from the local
-Lunaris project's dependencies; their original licence texts remain. LUMA is an
-application configuration of that mascot, not a claim to authorship of the library.
-Lunaris's interface was a design reference. No other project's scientific API or
-backend was imported into this application's browser matcher during this session.
+Three.js and agent-mascots are vendored with their original licence notices.
+LUMA configures the mascot library as a local guide. The application extends the
+supplied repository, https://github.com/sufi4414/analog-finder . The Lunaris interface
+was a design reference; no scientific backend from that project is used here.
 
 ## Country boundaries
 
@@ -25,11 +24,6 @@ https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_admi
 Geometry is retained; properties are normalized to a display name and ISO codes.
 Natural Earth states that its map data is public domain:
 https://www.naturalearthdata.com/about/terms-of-use/ .
-
-The earlier `johan/world.geo.json` copy was replaced during this audit because its
-README questions the dataset's underlying legal provenance. The active boundary
-file no longer comes from that intermediary. Historical Git revisions can retain
-the former file; this audit does not rewrite repository history.
 
 ## City and state/region names
 
@@ -48,17 +42,15 @@ The source is a selected gazetteer, not every settlement in the world.
 
 ## Earth imagery and environmental data
 
-NASA GIBS / Blue Marble Shaded Relief and Bathymetry is used by the live satellite
-basemap and decorative intro Earth. `web/assets/earth.jpg` was replaced during this
-audit by a fresh, direct NASA WMS download. It no longer depends on the image
-previously copied from Lunaris (whose notices traced it through TerraNova).
-The exact direct URL, dimensions and SHA-256 are in `web/data/provenance.json`.
+NASA GIBS / Blue Marble Shaded Relief and Bathymetry supplies the live satellite
+basemap and decorative intro Earth. The intro image was downloaded directly from
+NASA WMS; its URL and SHA-256 are in `web/data/provenance.json`.
 NASA GIBS service documentation: https://nasa-gibs.github.io/gibs-api-docs/ .
 
 The bundled Earth grid declares NASA MODIS Terra L3, NASA GMAO MERRA-2, and
 NASA/METI ASTER GDEM via GIBS colour-mapped visualizations. Their respective dataset
-credits remain applicable. The audit verified live WMS imagery and MODIS colormap
-access, but did not regenerate the repository's entire bundled grid. NASA media
+credits remain applicable. WMS imagery and MODIS colormap access were checked; the bundled Earth grid was
+not regenerated during submission preparation. NASA media
 guidance: https://www.nasa.gov/nasa-brand-center/images-and-media/ . NASA-origin
 media, third-party data, NASA names and marks have different applicable terms;
 neither the software licence nor this notice grants NASA endorsement.
@@ -84,8 +76,9 @@ Drone geometry, terrain and animations are procedural demonstration code.
 The retained Orbit view's Moon/Mars textures and orbital light/trail are authored
 procedural illustrations. The new cinematic uses the separately credited texture
 pack below. Both trajectories are decorative rather than physical ephemerides.
-Captured pictures and instantaneous telemetry are simulations. Moon/Mars climate
-values are approximate scenario presets, not live mission API measurements.
+Captured pictures and instantaneous telemetry are simulations. Cabeus/Gale profiles
+now use documented NASA evidence with labelled simulated/assumed missing traits;
+the other three profiles remain approximate presets. No profile is live telemetry.
 Similarity is a research/demo heuristic, not proof of landing safety, resource
 availability, permission to visit, or a scientifically validated new analogue.
 
@@ -114,3 +107,18 @@ They come from the installed Three.js distribution with source headers retained
 and the existing `web/vendor/THREE-LICENSE.txt`. `pipeline/vendor_postprocessing.py`
 copies just their dependency closure. An import map resolves `three` to the same
 vendored r172 module; no CDN or new runtime package is required.
+
+## Cabeus and Gale planetary evidence (15 November 2026)
+
+Credit NASA / LRO / Diviner team (UCLA), NASA / GSFC / MGS MOLA team,
+NASA / JPL-Caltech / Curiosity REMS team, and the PDS Geosciences Node at
+Washington University in St. Louis. PDS ODE feature records derive from USGS
+planetary feature information. Exact product URLs, versions, units, time coverage,
+datums, sampling changes and interpretation are documented in `PLANETARY_DATA.md`.
+Retrieved subset coordinates, elevations and response hashes are preserved in
+`web/data/planetary-evidence.json`. Temperature values for Gale come from NASA's
+published REMS summary; the raw REMS time series was not downloaded. Cabeus PRP
+temperatures are scientific model products, not direct measured extrema.
+Simulation and assumptions are identified separately in `web/planetary-targets.js`
+and the UI. These data additions do not change the licensing status of the
+original project or third-party software.
