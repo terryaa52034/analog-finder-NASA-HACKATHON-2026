@@ -1,8 +1,8 @@
 # Cabeus and Gale evidence
 
 Retrieved 15 November 2026 through resources reached from the official challenge
-Resources tab. These replace Shackleton crater rim and Utopia Planitia in both
-the target selector and drone scenario list. Other three targets remain legacy
+Resources tab. Cabeus and Gale are used in the target selector and drone scenario
+list. The other three targets remain legacy
 approximate presets; they have not been scientifically revalidated.
 
 ## What was retrieved
