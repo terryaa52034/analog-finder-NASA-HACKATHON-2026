@@ -3,6 +3,10 @@
 This application includes the software, data and imagery credited below.
 Third-party licences remain with their respective owners.
 
+The root [MIT License](LICENSE) applies only to original contributions owned by
+terryaa52034. It does not relicense the supplied baseline or the materials listed
+below. See [COPYRIGHT.md](COPYRIGHT.md) for the scope of the grant.
+
 ## Distributed libraries
 
 | Component                                    | Source and licence                                   | Retained notice                  |

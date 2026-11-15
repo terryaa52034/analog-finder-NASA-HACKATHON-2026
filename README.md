@@ -48,5 +48,11 @@ Earth cannot reproduce lunar or Martian gravity, vacuum or radiation conditions.
 
 Source repository: https://github.com/terryaa52034/analog-finder-NASA-HACKATHON-2026
 
-The repository has no root software licence. Retained third-party notices describe
-those components' terms; they do not license the whole project.
+## Licence
+
+Original contributions owned by terryaa52034 are available under the
+[MIT License](LICENSE), allowing commercial use with the required notice retained.
+The licence does not cover the pre-existing project or override third-party terms.
+See [copyright and licence scope](COPYRIGHT.md) and
+[third-party notices](THIRD_PARTY_NOTICES.md). The supplied baseline's missing root
+licence remains unresolved; this is not a blanket MIT grant for the whole project.
