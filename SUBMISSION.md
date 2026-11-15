@@ -85,3 +85,7 @@ source links and applicable notices are in
 Challenge: https://www.spaceappschallenge.org/2026/challenges/permanent-moon-base-locations-and-mars/?tab=resources
 
 
+
+## Final Project Link
+
+https://github.com/terryaa52034/analog-finder-NASA-HACKATHON-2026
