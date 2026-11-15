@@ -2,6 +2,8 @@
 
 Find Earth environments that help us prepare to explore the Moon and Mars.
 
+**Live app:** https://terryaa52034.github.io/analog-finder-NASA-HACKATHON-2026/
+
 Built for NASA Space Apps Challenge 2026, Analog Finder compares 90,701 Earth land
 cells with five planetary reference scenarios. Adjustable trait weights, map
 layers and explainable reports help users see what matches, what could be tested,

@@ -88,6 +88,8 @@ Challenge: https://www.spaceappschallenge.org/2026/challenges/permanent-moon-bas
 
 ## Final Project Link
 
+Live application: https://terryaa52034.github.io/analog-finder-NASA-HACKATHON-2026/
+
 https://github.com/terryaa52034/analog-finder-NASA-HACKATHON-2026
 
 ## Project Presentation
