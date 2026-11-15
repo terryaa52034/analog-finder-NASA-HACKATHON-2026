@@ -56,3 +56,7 @@ The licence does not cover the pre-existing project or override third-party term
 See [copyright and licence scope](COPYRIGHT.md) and
 [third-party notices](THIRD_PARTY_NOTICES.md). The supplied baseline's missing root
 licence remains unresolved; this is not a blanket MIT grant for the whole project.
+
+## Presentation
+
+[Download the project presentation](presentations/NASA_Space_App_Challenge_2026_SpaceConsultant.pptx)
