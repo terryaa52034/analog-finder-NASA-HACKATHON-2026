@@ -122,3 +122,15 @@ temperatures are scientific model products, not direct measured extrema.
 Simulation and assumptions are identified separately in `web/planetary-targets.js`
 and the UI. These data additions do not change the licensing status of the
 original project or third-party software.
+
+## AI assistance disclosure
+
+OpenAI ChatGPT/Codex assisted with research, interface design, code implementation
+and formatting, debugging, automated checks, documentation, presentation planning,
+and scripts for capturing screenshots and GIFs. These captures show the running
+application rather than AI-generated representations of its interface.
+
+AI assistance does not establish scientific validity or replace the dataset
+sources credited above. Simulated and assumed planetary conditions remain
+labelled separately from retrieved evidence. LUMA uses local rules and application
+state; no external language-model API powers LUMA or the analogue matcher.

@@ -69,6 +69,14 @@ Missing planetary traits are labelled simulated or assumed. Mare Tranquillitatis
 Jezero and Valles Marineris remain approximate presets. Drone frames and telemetry
 are procedural simulations, and Earth scores are an exploratory heuristic.
 
+**AI disclosure:** OpenAI ChatGPT/Codex assisted with research, interface design,
+code implementation and formatting, debugging, automated checks, documentation,
+presentation planning, and scripts for capturing screenshots and GIFs. Screenshots
+and GIFs show the running application. AI assistance is not scientific validation:
+NASA evidence is cited separately, and simulated or assumed values are labelled.
+LUMA is a local rule-based guide; the application does not call an external
+language-model API for guidance or analogue matching.
+
 **Supporting resources:** Leaflet, Three.js, agent-mascots, GeoNames, Natural Earth,
 Esri basemap services, Google Fonts and Solar System Scope textures. Credits,
 source links and applicable notices are in
